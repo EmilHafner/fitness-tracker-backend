@@ -22,7 +22,7 @@ spring:
 
 logging:
   level:
-    root: info
-    org.springframework.web: ERROR
-    com.sql: DEBUG
-    org.hibernate: ERROR
+    root: error
+    org.springframework.web: debug
+    com.sql: error
+    org.hibernate: error
