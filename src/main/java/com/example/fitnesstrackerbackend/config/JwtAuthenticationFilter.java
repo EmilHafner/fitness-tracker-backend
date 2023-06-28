@@ -1,6 +1,6 @@
 package com.example.fitnesstrackerbackend.config;
 
-import com.example.fitnesstrackerbackend.config.jwt.JwtUtil;
+import com.example.fitnesstrackerbackend.config.jwt.JwtService;
 import io.micrometer.common.lang.NonNull;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,7 +16,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-  private final JwtUtil jwtUtil;
+  private final JwtService jwtService;
 
   @Override protected void doFilterInternal(@NonNull HttpServletRequest request,
                                             @NonNull HttpServletResponse response,
@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       return;
     }
     jwtToken = authHeader.substring(7); // Remove the "Bearer " prefix
-    String username = jwtUtil.extractUsername(jwtToken); // TODO: Get the username from the JWT token
+    String username = jwtService.extractUsername(jwtToken); // TODO: Get the username from the JWT token
 
 
   }
