@@ -1,5 +1,6 @@
 package com.example.fitnesstrackerbackend.user;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,6 +32,7 @@ public class User implements UserDetails {
   private Integer id;
   private String firstName;
   private String lastName;
+  @Column(unique = true)
   private String username;
   private String password;
   @Enumerated(EnumType.STRING)
