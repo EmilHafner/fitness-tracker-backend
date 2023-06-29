@@ -19,6 +19,13 @@ spring:
       name: admin
       password: admin
 
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on_param
+    include-exception: true
+
 
 logging:
   level:
