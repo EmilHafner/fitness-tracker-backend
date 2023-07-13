@@ -26,19 +26,34 @@ import java.util.List;
 @RequestMapping("/api/v1/test-controller")
 public class testController {
 
-    private final UserService userService;
-    private final JwtService jwtService;
-    private final TrainingsService trainingsService;
+  private final UserService userService;
+  private final JwtService jwtService;
+  private final TrainingsService trainingsService;
 
-    @GetMapping
-    public List<User> helloWorld() {
-        return userService.getAllUsers();
-    }
+  @GetMapping
+  public List<User> helloWorld() {
+    return userService.getAllUsers();
+  }
 
-    @GetMapping("token")
-    public String getClaims(@RequestHeader("Authorization") String token) {
-        String jwt = token.substring(7);
-        return jwtService.extractClaim(jwt, Claims::getId);
-    }
+  @GetMapping("token")
+  public String getClaims(@RequestHeader("Authorization") String token) {
+    String jwt = token.substring(7);
+    return jwtService.extractClaim(jwt, Claims::getId);
+  }
 
+  @GetMapping("test1")
+  public String test1() {
+    SecurityContext securityContext = SecurityContextHolder.getContext();
+    User user = (User) securityContext.getAuthentication().getPrincipal();
+
+    // Try saving a training
+    Training savedTraining = trainingsService.saveTraining(
+            Training.builder().user(user)
+                    .startDateTime(Date.from(LocalDateTime.now().minusHours(1).toInstant(java.time.ZoneOffset.UTC)))
+                    .duration(java.sql.Time.valueOf("01:00:00"))
+                    .build()
+    );
+
+    return savedTraining.toString();
+  }
 }
