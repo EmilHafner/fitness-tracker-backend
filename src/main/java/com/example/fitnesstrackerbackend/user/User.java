@@ -31,7 +31,7 @@ public class User implements UserDetails {
 
   @Id
   @GeneratedValue
-  private Integer id;
+  private Long id;
   private String firstName;
   private String lastName;
   @Column(unique = true)
@@ -39,8 +39,10 @@ public class User implements UserDetails {
   private String password;
   @Enumerated(EnumType.STRING)
   private Role role;
+  /*
   @OneToMany
   private Set<Training> trainings;
+  */
 
   @Override public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));

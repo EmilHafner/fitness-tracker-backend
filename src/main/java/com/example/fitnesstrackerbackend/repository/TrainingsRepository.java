@@ -1,18 +1,16 @@
 package com.example.fitnesstrackerbackend.repository;
 
 import com.example.fitnesstrackerbackend.models.Training;
+import com.example.fitnesstrackerbackend.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface TrainingsRepository extends JpaRepository<Training, Integer> {
+public interface TrainingsRepository extends JpaRepository<Training, Long> {
+  List<Training> findTrainingsByUser(User user);
 
-  /**
-   * Find a training by id
-   * @param integer the id to search for
-   * @return Optional containing the training if found, empty otherwise
-   */
-  @Override Optional<Training> findById(Integer integer);
+
 }
