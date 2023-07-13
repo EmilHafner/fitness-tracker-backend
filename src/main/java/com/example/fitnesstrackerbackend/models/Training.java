@@ -30,5 +30,5 @@ public class Training {
   @JoinColumn(nullable = false)
   private User user;
   private Date startDateTime;
-  private Time duration;
+  private Date endDateTime;
 }
