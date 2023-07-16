@@ -35,9 +35,10 @@ public class AuthenticationService {
             .password(passwordEncoder.encode(request.getPassword()))
             .role(Role.USER)
             .build();
-    userRepository.save(user);
+    var savedUser = userRepository.save(user);
     var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder()
+            .user(mapToDto(savedUser))
             .token(jwtToken)
             .build();
   }
@@ -53,6 +54,7 @@ public class AuthenticationService {
             .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", request.getUsername())));
     var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder()
+            .user(mapToDto(user))
             .token(jwtToken)
             .build();  }
 
@@ -66,10 +68,23 @@ public class AuthenticationService {
             .password(passwordEncoder.encode(request.getPassword()))
             .role(Role.ADMIN)
             .build();
-    userRepository.save(user);
+    var savedUser = userRepository.save(user);
     var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder()
+            .user(mapToDto(savedUser))
             .token(jwtToken)
             .build();
   }
+
+  private UserResponseDto mapToDto(User user) {
+    return new UserResponseDto(
+            user.getId(),
+            user.getFirstName(),
+            user.getLastName(),
+            user.getUsername(),
+            user.getRole()
+    );
+  }
 }
+
+

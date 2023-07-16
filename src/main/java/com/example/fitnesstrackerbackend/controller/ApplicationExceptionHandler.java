@@ -8,6 +8,7 @@ import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.exception.ValidationException;
 import org.hibernate.annotations.NotFound;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,6 +47,16 @@ public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ResponseBody
     public NotFoundExceptionDto handleNotFoundException(NotFoundException e) {
+        logger.log(Level.WARNING,
+                String.format("Terminating request processing with status 404 due to %s: %s", e.getClass().getSimpleName(),
+                        e.getMessage()));
+        return new NotFoundExceptionDto(e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseBody
+    public NotFoundExceptionDto handleBadCredentialsException(BadCredentialsException e) {
         logger.log(Level.WARNING,
                 String.format("Terminating request processing with status 404 due to %s: %s", e.getClass().getSimpleName(),
                         e.getMessage()));
