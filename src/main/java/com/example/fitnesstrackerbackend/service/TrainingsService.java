@@ -1,6 +1,7 @@
 package com.example.fitnesstrackerbackend.service;
 
 
+import com.example.fitnesstrackerbackend.controller.dto.TrainingDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.models.Training;
@@ -27,8 +28,8 @@ public class TrainingsService {
      * @param user the user
      * @return A list of all trainings for the user.
      */
-    public List<Training> getAllTrainingsForUser(User user) {
-        return trainingsRepository.findTrainingsByUser(user);
+    public List<TrainingDto> getAllTrainingsForUser(User user) {
+        return trainingsRepository.findTrainingsByUser(user).stream().map(this::convertToDto).toList();
     }
 
     /**
@@ -54,6 +55,15 @@ public class TrainingsService {
 
         training.setEndDateTime(new Date(System.currentTimeMillis()));
         return trainingsRepository.save(training);
+    }
+
+    private TrainingDto convertToDto(Training training) {
+        return new TrainingDto(
+                training.getId(),
+                training.getUser().getId(),
+                training.getStartDateTime(),
+                training.getEndDateTime()
+        );
     }
 
 

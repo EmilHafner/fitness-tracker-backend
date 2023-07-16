@@ -1,5 +1,6 @@
 package com.example.fitnesstrackerbackend.controller;
 
+import com.example.fitnesstrackerbackend.controller.dto.TrainingDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.models.Training;
@@ -20,7 +21,7 @@ public class TrainingController {
     private final TrainingsService trainingsService;
 
     @GetMapping("/all-trainings")
-    public List<Training> getAllTrainingsForCurrentUser() {
+    public List<TrainingDto> getAllTrainingsForCurrentUser() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return trainingsService.getAllTrainingsForUser(user);
