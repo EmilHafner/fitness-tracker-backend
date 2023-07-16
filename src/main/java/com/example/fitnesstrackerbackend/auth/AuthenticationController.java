@@ -33,11 +33,4 @@ public class AuthenticationController {
     return ResponseEntity.ok(authService.authenticate(request));
   }
 
-  @RolesAllowed("ROLE_ADMIN")
-  @GetMapping("/all-users")
-    public ResponseEntity<String> allUsers() {
-        return ResponseEntity.ok("Hello World. Sent from secured endpoint");
-    }
-
-
 }
