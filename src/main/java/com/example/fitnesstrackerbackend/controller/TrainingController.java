@@ -3,8 +3,10 @@ package com.example.fitnesstrackerbackend.controller;
 import com.example.fitnesstrackerbackend.controller.dto.TrainingDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
+import com.example.fitnesstrackerbackend.exception.ValidationException;
 import com.example.fitnesstrackerbackend.models.Training;
 import com.example.fitnesstrackerbackend.service.TrainingsService;
+import com.example.fitnesstrackerbackend.service.validators.TrainingValidator;
 import com.example.fitnesstrackerbackend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,11 +30,9 @@ public class TrainingController {
     }
 
     @PostMapping("/add-training")
-    public Training addTraining(@RequestBody Training training) {
+    public Training addTraining(@RequestBody Training training) throws ValidationException, ConflictException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         training.setUser(user);
-
-        // TODO: Validate training
 
         return trainingsService.saveTraining(training);
     }

@@ -4,6 +4,7 @@ package com.example.fitnesstrackerbackend.service;
 import com.example.fitnesstrackerbackend.controller.dto.TrainingDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
+import com.example.fitnesstrackerbackend.exception.ValidationException;
 import com.example.fitnesstrackerbackend.models.Training;
 import com.example.fitnesstrackerbackend.repository.TrainingsRepository;
 import com.example.fitnesstrackerbackend.service.validators.TrainingValidator;
@@ -38,7 +39,12 @@ public class TrainingsService {
      * @param training the training to save
      * @return the saved training
      */
-    public Training saveTraining(Training training) {
+    public Training saveTraining(Training training) throws ValidationException, ConflictException {
+
+        trainingValidator.validateForSaveTraining(training);
+
+        // TODO: Check if another training is running for the user
+
         return trainingsRepository.save(training);
     }
 

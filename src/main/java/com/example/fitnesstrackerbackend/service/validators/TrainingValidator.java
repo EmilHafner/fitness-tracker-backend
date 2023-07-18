@@ -27,4 +27,25 @@ public class TrainingValidator {
         }
 
     }
+
+    public void validateForSaveTraining(Training training) throws ConflictException, ValidationException {
+        List<String> validationErrors = new ArrayList<>();
+        List<String> conflictErrors = new ArrayList<>();
+
+        if (training.getId() != null) {
+            conflictErrors.add("Training id must be null");
+        }
+
+        if (training.getStartDateTime() == null) {
+            validationErrors.add("Start date time cannot be empty");
+        }
+
+        if (conflictErrors.size() > 0) {
+            throw new ConflictException("Update request conflicts with existing data", conflictErrors);
+        }
+
+        if (validationErrors.size() > 0) {
+            throw new ValidationException("Update request is invalid", validationErrors);
+        }
+    }
 }
