@@ -40,10 +40,7 @@ public class TrainingsService {
      * @return the saved training
      */
     public Training saveTraining(Training training) throws ValidationException, ConflictException {
-
         trainingValidator.validateForSaveTraining(training);
-
-        // TODO: Check if another training is running for the user
 
         return trainingsRepository.save(training);
     }
@@ -73,4 +70,14 @@ public class TrainingsService {
     }
 
 
+  public void deleteTrainingWithIdAndUser(Long trainingId, User user) throws NotFoundException {
+    Training training = trainingsRepository.getTrainingById(trainingId).orElseThrow(
+            () -> new NotFoundException(String.format("Training with Id %s not found", trainingId)));
+
+    if (!training.getUser().getId().equals(user.getId())) {
+      throw new NotFoundException(String.format("Training with id %s not found for user with id %s", trainingId, user.getId()));
+    }
+
+    trainingsRepository.delete(training);
+  }
 }

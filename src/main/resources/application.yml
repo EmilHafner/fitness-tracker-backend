@@ -1,8 +1,13 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:8099/postgres
-    username: postgres
-    password: postgres
+    # This is a free database hosted on neon.tech
+    url: jdbc:postgresql://ep-wispy-recipe-541979.eu-central-1.aws.neon.tech/neondb?user=EmilHafner&password=e7vMlHApfVQ6
+
+    # This is a local database. If the above url is not working, use this one.
+    # Just set up postgres in docker and run it on port 8099
+    #url: jdbc:postgresql://localhost:8099/postgres
+    #username: postgres
+    #password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     generate-ddl: true

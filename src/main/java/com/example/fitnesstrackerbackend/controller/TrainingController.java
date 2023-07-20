@@ -20,29 +20,34 @@ import java.util.Optional;
 @RequestMapping("/api/v1/training")
 public class TrainingController {
 
-    private final TrainingsService trainingsService;
+  private final TrainingsService trainingsService;
 
-    @GetMapping("/all-trainings")
-    public List<TrainingDto> getAllTrainingsForCurrentUser() {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  @GetMapping("/all-trainings")
+  public List<TrainingDto> getAllTrainingsForCurrentUser() {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return trainingsService.getAllTrainingsForUser(user);
-    }
+    return trainingsService.getAllTrainingsForUser(user);
+  }
 
-    @PostMapping("/add-training")
-    public Training addTraining(@RequestBody Training training) throws ValidationException, ConflictException {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        training.setUser(user);
+  @PostMapping("/add-training")
+  public Training addTraining(@RequestBody Training training) throws ValidationException, ConflictException {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    training.setUser(user);
 
-        return trainingsService.saveTraining(training);
-    }
+    return trainingsService.saveTraining(training);
+  }
 
-    @PatchMapping("/stop-training/{trainingId}")
-    public Training stopTraining(@PathVariable Long trainingId) throws ConflictException, NotFoundException {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  @PatchMapping("/stop-training/{trainingId}")
+  public Training stopTraining(@PathVariable Long trainingId) throws ConflictException, NotFoundException {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        return trainingsService.stopTrainingWithIdAndUser(trainingId, user);
-    }
+    return trainingsService.stopTrainingWithIdAndUser(trainingId, user);
+  }
 
+  @DeleteMapping("/delete-training/{trainingId}")
+  public void deleteTraining(@PathVariable Long trainingId) throws NotFoundException {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+    trainingsService.deleteTrainingWithIdAndUser(trainingId, user);
+  }
 }
