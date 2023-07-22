@@ -6,7 +6,6 @@ import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.exception.ValidationException;
 import com.example.fitnesstrackerbackend.models.Training;
 import com.example.fitnesstrackerbackend.service.TrainingsService;
-import com.example.fitnesstrackerbackend.service.validators.TrainingValidator;
 import com.example.fitnesstrackerbackend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,34 +19,52 @@ import java.util.Optional;
 @RequestMapping("/api/v1/training")
 public class TrainingController {
 
-  private final TrainingsService trainingsService;
+    private final TrainingsService trainingsService;
 
-  @GetMapping("/all-trainings")
-  public List<TrainingDto> getAllTrainingsForCurrentUser() {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    @GetMapping("/all-trainings")
+    public List<TrainingDto> getAllTrainingsForCurrentUser() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    return trainingsService.getAllTrainingsForUser(user);
-  }
+        return trainingsService.getAllTrainingsForUser(user);
+    }
 
-  @PostMapping("/add-training")
-  public Training addTraining(@RequestBody Training training) throws ValidationException, ConflictException {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    training.setUser(user);
+    @GetMapping("/{trainingId}")
+    public Optional<Training> getTrainingById(@PathVariable Long trainingId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    return trainingsService.saveTraining(training);
-  }
+        return trainingsService.getTrainingByIdAndUser(trainingId, user);
+    }
 
-  @PatchMapping("/stop-training/{trainingId}")
-  public Training stopTraining(@PathVariable Long trainingId) throws ConflictException, NotFoundException {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    // Todo: Paginate the results
+    /*
+    @GetMapping("/all-trainings")
+    public List<TrainingDto> getAllTrainingsForCurrentUser(@RequestParam int page, @RequestParam int size) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    return trainingsService.stopTrainingWithIdAndUser(trainingId, user);
-  }
+        return trainingsService.getAllTrainingsForUser(user, page, size);
+    }
 
-  @DeleteMapping("/delete-training/{trainingId}")
-  public void deleteTraining(@PathVariable Long trainingId) throws NotFoundException {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+     */
 
-    trainingsService.deleteTrainingWithIdAndUser(trainingId, user);
-  }
+    @PostMapping("/add-training")
+    public Training addTraining(@RequestBody Training training) throws ValidationException, ConflictException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        training.setUser(user);
+
+        return trainingsService.saveTraining(training);
+    }
+
+    @PatchMapping("/stop-training/{trainingId}")
+    public Training stopTraining(@PathVariable Long trainingId) throws ConflictException, NotFoundException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        return trainingsService.stopTrainingWithIdAndUser(trainingId, user);
+    }
+
+    @DeleteMapping("/delete-training/{trainingId}")
+    public void deleteTraining(@PathVariable Long trainingId) throws NotFoundException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        trainingsService.deleteTrainingWithIdAndUser(trainingId, user);
+    }
 }
