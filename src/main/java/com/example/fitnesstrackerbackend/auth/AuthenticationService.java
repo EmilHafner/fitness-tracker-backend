@@ -31,7 +31,7 @@ public class AuthenticationService {
     var user = User.builder()
             .firstName(request.getFirstName())
             .lastName(request.getLastName())
-            .username(request.getUsername().toLowerCase())
+            .username(request.getUsername())
             .password(passwordEncoder.encode(request.getPassword()))
             .role(Role.USER)
             .build();
@@ -50,7 +50,7 @@ public class AuthenticationService {
                     request.getPassword()
             )
     );
-    var user = userRepository.findByUsername(request.getUsername())
+    var user = userRepository.findByUsernameAllIgnoreCase(request.getUsername())
             .orElseThrow(() -> new UsernameNotFoundException(String.format("User %s not found", request.getUsername())));
     var jwtToken = jwtService.generateToken(user);
     return AuthenticationResponse.builder()
@@ -64,7 +64,7 @@ public class AuthenticationService {
     var user = User.builder()
             .firstName(request.getFirstName())
             .lastName(request.getLastName())
-            .username(request.getUsername().toLowerCase())
+            .username(request.getUsername())
             .password(passwordEncoder.encode(request.getPassword()))
             .role(Role.ADMIN)
             .build();

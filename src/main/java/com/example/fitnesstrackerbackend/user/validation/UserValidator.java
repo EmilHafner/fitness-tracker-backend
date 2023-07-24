@@ -4,7 +4,6 @@ import com.example.fitnesstrackerbackend.auth.RegistrationRequest;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.ValidationException;
 import com.example.fitnesstrackerbackend.user.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -52,7 +51,7 @@ public class UserValidator {
       validationErrors.add("Last name cannot be empty");
     }
 
-    if (registrationRequest.getUsername() != null && userRepository.findByUsername(registrationRequest.getUsername().toLowerCase()).isPresent()) {
+    if (registrationRequest.getUsername() != null && userRepository.findByUsernameAllIgnoreCase(registrationRequest.getUsername().toLowerCase()).isPresent()) {
       conflictErrors.add("Username is already taken");
     }
 
