@@ -5,15 +5,19 @@ import com.example.fitnesstrackerbackend.controller.dto.TrainingDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.exception.ValidationException;
+import com.example.fitnesstrackerbackend.models.Exercise;
+import com.example.fitnesstrackerbackend.models.ExerciseInTraining;
 import com.example.fitnesstrackerbackend.models.Training;
+import com.example.fitnesstrackerbackend.repository.ExerciseInTrainingRepository;
+import com.example.fitnesstrackerbackend.repository.ExerciseRepository;
 import com.example.fitnesstrackerbackend.repository.TrainingsRepository;
 import com.example.fitnesstrackerbackend.service.validators.TrainingValidator;
 import com.example.fitnesstrackerbackend.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -22,6 +26,7 @@ public class TrainingsService {
 
     private final TrainingsRepository trainingsRepository;
     private final TrainingValidator trainingValidator;
+    ExerciseInTrainingRepository exerciseInTrainingRepository;
 
     /**
      * Get all trainings for a user.
@@ -80,4 +85,19 @@ public class TrainingsService {
 
     trainingsRepository.delete(training);
   }
+
+  public Training addExercise(Exercise exercise, Long trainingId) throws NotFoundException {
+    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    Training training = trainingsRepository.findById(trainingId).orElseThrow(
+            () -> new NotFoundException(String.format("Training with Id %s not found", trainingId)));
+
+    ExerciseInTraining exerciseInTraining = ExerciseInTraining.builder().training(training).exercise(exercise).build();
+
+    exerciseInTrainingRepository.save(exerciseInTraining);
+    return training;
+  }
+
+
+
 }
