@@ -42,4 +42,10 @@ public class ExerciseService {
   public List<Exercise> findAll() {
     return exerciseRepository.findAll();
   }
+
+  public Exercise updateExercise(Exercise exercise) {
+    //TODO make sure that the exercise exists in the database. If not, throw an exception
+    //Maybe it is enough to just check if the id is not null?
+    return exerciseRepository.save(exercise);
+  }
 }
