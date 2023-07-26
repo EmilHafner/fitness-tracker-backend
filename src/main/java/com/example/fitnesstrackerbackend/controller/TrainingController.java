@@ -29,6 +29,11 @@ public class TrainingController {
     return trainingsService.getAllTrainingsForUser(user);
   }
 
+  @GetMapping("/{trainingId}")
+  public Optional<Training> getTrainingById(@PathVariable Long trainingId) {
+    return trainingsService.getTrainingById(trainingId);
+  }
+
   @PostMapping("/add-training")
   public Training addTraining(@RequestBody Training training) throws ValidationException, ConflictException {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
