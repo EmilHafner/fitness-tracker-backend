@@ -1,7 +1,11 @@
 package com.example.fitnesstrackerbackend.models;
 
 import com.example.fitnesstrackerbackend.models.enums.Bodypart;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -15,7 +19,12 @@ import lombok.*;
 @Table(name="exercises")
 public class Exercise {
     @Id
-    private Integer id;
+    @GeneratedValue
+    private Long id;
+
+    @Column(unique = true)
     private String name;
+
+    @Enumerated(EnumType.STRING)
     private Bodypart bodypart;
 }
