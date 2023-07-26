@@ -1,6 +1,7 @@
 package com.example.fitnesstrackerbackend.user;
 
 import com.example.fitnesstrackerbackend.models.Training;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -36,6 +37,7 @@ public class User implements UserDetails {
   private String lastName;
   @Column(unique = true)
   private String username;
+  @JsonIgnore
   private String password;
   @Enumerated(EnumType.STRING)
   private Role role;
