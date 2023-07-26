@@ -1,6 +1,9 @@
 package com.example.fitnesstrackerbackend.service;
 
+import com.example.fitnesstrackerbackend.exception.ConflictException;
+import com.example.fitnesstrackerbackend.exception.ValidationException;
 import com.example.fitnesstrackerbackend.models.enums.Bodypart;
+import com.example.fitnesstrackerbackend.service.validators.ExerciseValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.example.fitnesstrackerbackend.repository.ExerciseRepository;
@@ -14,8 +17,10 @@ import java.util.Optional;
 public class ExerciseService {
 
   private final ExerciseRepository exerciseRepository;
+  private final ExerciseValidator exerciseValidator;
 
-  public Exercise save(Exercise exercise) {
+  public Exercise save(Exercise exercise) throws ValidationException, ConflictException {
+    exerciseValidator.validateForSaveOrUpdate(exercise);
     return exerciseRepository.save(exercise);
   }
 
