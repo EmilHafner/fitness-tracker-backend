@@ -31,4 +31,6 @@ public class Training {
   private User user;
   private Date startDateTime;
   private Date endDateTime;
+  @ManyToOne @JoinColumn(name = "exercise_in_training_id")
+  private ExerciseInTraining exerciseInTraining;
 }
