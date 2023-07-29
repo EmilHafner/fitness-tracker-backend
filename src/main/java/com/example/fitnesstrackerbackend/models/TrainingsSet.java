@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Generated;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 public class TrainingsSet {
   @Id
+  @Generated
   private Long id;
 
   private Integer reps;
