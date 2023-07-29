@@ -5,12 +5,11 @@ import com.example.fitnesstrackerbackend.controller.dto.TrainingDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.exception.ValidationException;
-import com.example.fitnesstrackerbackend.models.Exercise;
-import com.example.fitnesstrackerbackend.models.ExerciseInTraining;
+import com.example.fitnesstrackerbackend.models.ExerciseEvent;
 import com.example.fitnesstrackerbackend.models.Training;
-import com.example.fitnesstrackerbackend.repository.ExerciseInTrainingRepository;
-import com.example.fitnesstrackerbackend.repository.ExerciseRepository;
+import com.example.fitnesstrackerbackend.repository.ExerciseEventRepository;
 import com.example.fitnesstrackerbackend.repository.TrainingsRepository;
+import com.example.fitnesstrackerbackend.service.validators.AccessValidator;
 import com.example.fitnesstrackerbackend.service.validators.TrainingValidator;
 import com.example.fitnesstrackerbackend.user.User;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,9 @@ public class TrainingsService {
 
   private final TrainingsRepository trainingsRepository;
   private final TrainingValidator trainingValidator;
-  ExerciseInTrainingRepository exerciseInTrainingRepository;
+  private final ExerciseTypeService exerciseTypeService;
+  private final ExerciseEventRepository exerciseEventRepository;
+  private final AccessValidator accessValidator;
 
   /**
    * Get all trainings for a user.
@@ -88,28 +89,35 @@ public class TrainingsService {
     trainingsRepository.delete(training);
   }
 
-  public Training addExercise(Exercise exercise, Long trainingId) throws NotFoundException {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    Training training = trainingsRepository.findById(trainingId).orElseThrow(
-            () -> new NotFoundException(String.format("Training with Id %s not found", trainingId)));
+  public Optional<Training> getTrainingById(Long trainingId) throws NotFoundException {
 
-    ExerciseInTraining exerciseInTraining = ExerciseInTraining.builder().training(training).exercise(exercise).build();
+    accessValidator.validateUserAccessToTraining(trainingId);
 
-    exerciseInTrainingRepository.save(exerciseInTraining);
-    return training;
+    return trainingsRepository.findById(trainingId);
   }
 
+  public List<ExerciseEvent> getExercisesForTraining(Long trainingId) throws NotFoundException {
 
-  public Optional<Training> getTrainingById(Long trainingId) {
-    User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    Training training = trainingsRepository.getTrainingById(trainingId).orElseThrow(
+            () -> new NotFoundException(String.format("Training with Id %s not found", trainingId)));
 
-    Optional<Training> t = trainingsRepository.findById(trainingId);
+    accessValidator.validateUserAccessToTraining(training);
 
-    if (t.isPresent() && t.get().getUser().getId().equals(user.getId())) {
-      return t;
-    } else {
-      return Optional.empty();
-    }
+    return training.getExerciseEvents();
+  }
+
+  public ExerciseEvent addExerciseEventToTraining(Long trainingId, ExerciseEvent exerciseEvent) throws NotFoundException, ValidationException {
+    Training training = trainingsRepository.getTrainingById(trainingId).orElseThrow(
+            () -> new NotFoundException(String.format("Training with Id %s not found", trainingId)));
+
+    accessValidator.validateUserAccessToTraining(training);
+
+    exerciseEvent.setTraining(training);
+    exerciseEvent.setOrderNumber(training.getExerciseEvents().size() + 1);
+
+    // trainingValidator.validateForAddExerciseEventToTraining(exerciseEvent);
+
+    return exerciseEventRepository.save(exerciseEvent);
   }
 }

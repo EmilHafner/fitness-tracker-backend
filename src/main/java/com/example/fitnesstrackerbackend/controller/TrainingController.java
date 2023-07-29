@@ -4,9 +4,9 @@ import com.example.fitnesstrackerbackend.controller.dto.TrainingDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.exception.ValidationException;
+import com.example.fitnesstrackerbackend.models.ExerciseEvent;
 import com.example.fitnesstrackerbackend.models.Training;
 import com.example.fitnesstrackerbackend.service.TrainingsService;
-import com.example.fitnesstrackerbackend.service.validators.TrainingValidator;
 import com.example.fitnesstrackerbackend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,7 +30,7 @@ public class TrainingController {
   }
 
   @GetMapping("/{trainingId}")
-  public Optional<Training> getTrainingById(@PathVariable Long trainingId) {
+  public Optional<Training> getTrainingById(@PathVariable Long trainingId) throws NotFoundException {
     return trainingsService.getTrainingById(trainingId);
   }
 
@@ -55,4 +55,19 @@ public class TrainingController {
 
     trainingsService.deleteTrainingWithIdAndUser(trainingId, user);
   }
+
+
+  @GetMapping("/{trainingId}/exercises")
+  public List<ExerciseEvent> getExercisesForTraining(@PathVariable Long trainingId) throws NotFoundException {
+    return trainingsService.getExercisesForTraining(trainingId);
+  }
+
+  @PostMapping("/{trainingId}/exercises")
+  public ExerciseEvent addExerciseEventToTraining(
+          @PathVariable Long trainingId, @RequestBody ExerciseEvent exerciseEvent) throws NotFoundException, ConflictException, ValidationException {
+    return trainingsService.addExerciseEventToTraining(trainingId,  exerciseEvent);
+  }
+
 }
+
+
