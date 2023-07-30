@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/exercises")
+@RequestMapping("/api/v1/exerciseTypes")
 public class ExerciseTypeController {
 
   private final ExerciseTypeService exerciseTypeService;
