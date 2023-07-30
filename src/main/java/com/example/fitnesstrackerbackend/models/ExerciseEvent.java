@@ -1,10 +1,12 @@
 package com.example.fitnesstrackerbackend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -36,7 +38,7 @@ public class ExerciseEvent {
   @JsonIgnore
   private Training training;
 
-  @OneToMany @ToString.Exclude
+  @OneToMany(mappedBy = "exerciseEvent") @ToString.Exclude
   private List<TrainingsSet> trainingsSets;
 
   private Integer orderNumber;
