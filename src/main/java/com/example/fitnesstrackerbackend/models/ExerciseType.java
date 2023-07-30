@@ -1,43 +1,41 @@
 package com.example.fitnesstrackerbackend.models;
 
-import com.example.fitnesstrackerbackend.user.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.example.fitnesstrackerbackend.models.enums.Bodypart;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
-@Getter @Setter @RequiredArgsConstructor
+// Entity class for gym exercises
+@Getter @Setter @ToString @RequiredArgsConstructor
 @Entity
-@Builder
 @AllArgsConstructor
-@Table(name = "trainings")
-public class Training {
-  @Id
-  @GeneratedValue
-  private Long id;
-  @ManyToOne
-  @JoinColumn(nullable = false)
-  @JsonIgnore
-  private User user;
-  private Date startDateTime;
-  private Date endDateTime;
+@Builder
+@Table(name="exercise_types")
+public class ExerciseType {
+    @Id
+    @GeneratedValue
+    private Long id;
 
-  @OneToMany(mappedBy = "training")
-  private List<ExerciseEvent> exerciseEvents;
+    @Column(unique = true)
+    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private Bodypart bodypart;
 
   @Override
   public final boolean equals(Object o) {
@@ -53,10 +51,10 @@ public class Training {
             this.getClass();
     if (thisEffectiveClass
             != oEffectiveClass) return false;
-    Training training = (Training) o;
+    ExerciseType that = (ExerciseType) o;
     return getId()
             != null
-            && Objects.equals(getId(), training.getId());
+            && Objects.equals(getId(), that.getId());
   }
 
   @Override

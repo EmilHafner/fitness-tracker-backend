@@ -1,11 +1,12 @@
 package com.example.fitnesstrackerbackend.models;
 
-import com.example.fitnesstrackerbackend.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
@@ -14,30 +15,33 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-@Getter @Setter @RequiredArgsConstructor
+@Getter @Setter @ToString @RequiredArgsConstructor
 @Entity
-@Builder
 @AllArgsConstructor
-@Table(name = "trainings")
-public class Training {
+@Builder
+@Table(name = "exercise_events")
+public class ExerciseEvent {
   @Id
   @GeneratedValue
   private Long id;
-  @ManyToOne
-  @JoinColumn(nullable = false)
-  @JsonIgnore
-  private User user;
-  private Date startDateTime;
-  private Date endDateTime;
 
-  @OneToMany(mappedBy = "training")
-  private List<ExerciseEvent> exerciseEvents;
+  @ManyToOne(fetch = FetchType.EAGER)
+  private ExerciseType exerciseType;
+
+  @ManyToOne(optional = false)
+  @JsonIgnore
+  private Training training;
+
+  @OneToMany(mappedBy = "exerciseEvent") @ToString.Exclude
+  private List<TrainingsSet> trainingsSets;
+
+  private Integer orderNumber;
 
   @Override
   public final boolean equals(Object o) {
@@ -53,10 +57,10 @@ public class Training {
             this.getClass();
     if (thisEffectiveClass
             != oEffectiveClass) return false;
-    Training training = (Training) o;
+    ExerciseEvent that = (ExerciseEvent) o;
     return getId()
             != null
-            && Objects.equals(getId(), training.getId());
+            && Objects.equals(getId(), that.getId());
   }
 
   @Override

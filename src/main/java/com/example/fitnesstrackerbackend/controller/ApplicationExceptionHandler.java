@@ -6,6 +6,7 @@ import com.example.fitnesstrackerbackend.controller.dto.ValidationExceptionDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.exception.ValidationException;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.NotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,7 +22,8 @@ import java.util.logging.Logger;
 @ControllerAdvice
 public class ApplicationExceptionHandler {
 
-    Logger logger = Logger.getLogger(ApplicationExceptionHandler.class.getName());
+
+    private final Logger logger = Logger.getLogger(ApplicationExceptionHandler.class.getName());
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -71,7 +73,7 @@ public class ApplicationExceptionHandler {
         logger.log(Level.SEVERE,
                 String.format("Terminating request processing with status 500 due to %s: %s", e.getClass().getSimpleName(),
                         e.getMessage()));
-        return "Internal server error";
+        return String.format("Internal Server Error: %s", e.getMessage());
     }
 
 }

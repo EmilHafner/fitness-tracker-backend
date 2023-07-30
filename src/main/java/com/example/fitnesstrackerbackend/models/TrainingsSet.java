@@ -1,43 +1,39 @@
 package com.example.fitnesstrackerbackend.models;
 
-import com.example.fitnesstrackerbackend.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.proxy.HibernateProxy;
 
-import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 
-@Getter @Setter @RequiredArgsConstructor
 @Entity
+@Getter @Setter @ToString @RequiredArgsConstructor
 @Builder
 @AllArgsConstructor
-@Table(name = "trainings")
-public class Training {
+public class TrainingsSet {
   @Id
   @GeneratedValue
   private Long id;
-  @ManyToOne
-  @JoinColumn(nullable = false)
-  @JsonIgnore
-  private User user;
-  private Date startDateTime;
-  private Date endDateTime;
 
-  @OneToMany(mappedBy = "training")
-  private List<ExerciseEvent> exerciseEvents;
+  private Integer reps;
+  private Float weight;
+
+  private Integer orderNumber;
+
+  @ManyToOne(optional = false)
+  @JsonIgnore
+  private ExerciseEvent exerciseEvent;
 
   @Override
   public final boolean equals(Object o) {
@@ -53,10 +49,10 @@ public class Training {
             this.getClass();
     if (thisEffectiveClass
             != oEffectiveClass) return false;
-    Training training = (Training) o;
+    TrainingsSet that = (TrainingsSet) o;
     return getId()
             != null
-            && Objects.equals(getId(), training.getId());
+            && Objects.equals(getId(), that.getId());
   }
 
   @Override

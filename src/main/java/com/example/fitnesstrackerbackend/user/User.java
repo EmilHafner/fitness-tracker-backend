@@ -37,7 +37,6 @@ public class User implements UserDetails {
   private String lastName;
   @Column(unique = true)
   private String username;
-  // Make the password column not readable
   @JsonIgnore
   private String password;
   @Enumerated(EnumType.STRING)
