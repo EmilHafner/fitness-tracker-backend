@@ -3,8 +3,11 @@ package com.example.fitnesstrackerbackend.service.validators;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.models.ExerciseEvent;
 import com.example.fitnesstrackerbackend.models.Training;
+import com.example.fitnesstrackerbackend.models.TrainingsSet;
 import com.example.fitnesstrackerbackend.repository.ExerciseEventRepository;
 import com.example.fitnesstrackerbackend.repository.TrainingsRepository;
+import com.example.fitnesstrackerbackend.repository.TrainingsSetRepository;
+import com.example.fitnesstrackerbackend.service.TrainingsSetService;
 import com.example.fitnesstrackerbackend.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,17 +19,18 @@ public class AccessValidator {
 
   private final TrainingsRepository trainingsRepository;
   private final ExerciseEventRepository exerciseEventRepository;
+  private final TrainingsSetRepository trainingsSetRepository;
 
 
-  public void validateUserAccessToTraining(long trainingId) throws NotFoundException {
+  public void validateAccessToTraining(long trainingId) throws NotFoundException {
     Training training = trainingsRepository.getTrainingById(trainingId).orElseThrow(
             () -> new NotFoundException(String.format("Training with Id %s not found", trainingId)));
 
-    validateUserAccessToTraining(training);
+    validateAccessToTraining(training);
 
   }
 
-  public void validateUserAccessToTraining(Training training) throws NotFoundException {
+  public void validateAccessToTraining(Training training) throws NotFoundException {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     if (!training.getUser().getId().equals(user.getId())) {
@@ -34,18 +38,32 @@ public class AccessValidator {
     }
   }
 
-  public void validateUserAccessToExerciseEvent(long exerciseEventId) throws NotFoundException {
+  public void validateAccessToExerciseEvent(long exerciseEventId) throws NotFoundException {
     ExerciseEvent exerciseEvent = exerciseEventRepository.findById(exerciseEventId).orElseThrow(
             () -> new NotFoundException(String.format("ExerciseEvent with Id %s not found", exerciseEventId)));
 
-    validateUserAccessToExerciseEvent(exerciseEvent);
+    validateAccessToExerciseEvent(exerciseEvent);
   }
 
-  public void validateUserAccessToExerciseEvent(ExerciseEvent exerciseEvent) throws NotFoundException {
+  public void validateAccessToExerciseEvent(ExerciseEvent exerciseEvent) throws NotFoundException {
 
     Training training = exerciseEvent.getTraining();
 
-    validateUserAccessToTraining(training);
+    validateAccessToTraining(training);
   }
+
+  public void validateAccessToTrainingsSet(Long trainingsSetId) throws NotFoundException {
+    TrainingsSet trainingsSet = trainingsSetRepository.findById(trainingsSetId).orElseThrow(
+            () -> new NotFoundException(String.format("TrainingsSet with Id %s not found", trainingsSetId)));
+
+    validateAccessToTrainingsSet(trainingsSet);
+  }
+
+  public void validateAccessToTrainingsSet(TrainingsSet trainingsSet) throws NotFoundException {
+    ExerciseEvent exerciseEvent = trainingsSet.getExerciseEvent();
+
+    validateAccessToExerciseEvent(exerciseEvent);
+  }
+
 
 }

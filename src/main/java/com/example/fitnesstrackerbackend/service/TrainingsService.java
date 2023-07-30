@@ -13,7 +13,6 @@ import com.example.fitnesstrackerbackend.service.validators.AccessValidator;
 import com.example.fitnesstrackerbackend.service.validators.TrainingValidator;
 import com.example.fitnesstrackerbackend.user.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -92,17 +91,16 @@ public class TrainingsService {
 
   public Optional<Training> getTrainingById(Long trainingId) throws NotFoundException {
 
-    accessValidator.validateUserAccessToTraining(trainingId);
+    accessValidator.validateAccessToTraining(trainingId);
 
     return trainingsRepository.findById(trainingId);
   }
 
   public List<ExerciseEvent> getExercisesForTraining(Long trainingId) throws NotFoundException {
-
     Training training = trainingsRepository.getTrainingById(trainingId).orElseThrow(
             () -> new NotFoundException(String.format("Training with Id %s not found", trainingId)));
 
-    accessValidator.validateUserAccessToTraining(training);
+    accessValidator.validateAccessToTraining(training);
 
     return training.getExerciseEvents();
   }
@@ -111,7 +109,7 @@ public class TrainingsService {
     Training training = trainingsRepository.getTrainingById(trainingId).orElseThrow(
             () -> new NotFoundException(String.format("Training with Id %s not found", trainingId)));
 
-    accessValidator.validateUserAccessToTraining(training);
+    accessValidator.validateAccessToTraining(training);
 
     exerciseEvent.setTraining(training);
     exerciseEvent.setOrderNumber(training.getExerciseEvents().size() + 1);
