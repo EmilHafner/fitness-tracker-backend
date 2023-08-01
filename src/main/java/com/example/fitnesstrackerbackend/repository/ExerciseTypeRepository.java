@@ -15,6 +15,6 @@ public interface ExerciseTypeRepository extends JpaRepository<ExerciseType, Long
 
   List<ExerciseType> findByBodypart(Bodypart bodypart);
 
-  List<ExerciseType> searchByName(String name);
+  List<ExerciseType> findByNameContainingIgnoreCase(String name);
 
 }

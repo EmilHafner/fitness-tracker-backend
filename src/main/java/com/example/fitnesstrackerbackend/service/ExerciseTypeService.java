@@ -29,7 +29,7 @@ public class ExerciseTypeService {
   }
 
   public List<ExerciseType> searchByName(String name) {
-    return exerciseTypeRepository.searchByName(name);
+    return exerciseTypeRepository.findByNameContainingIgnoreCase(name);
   }
 
   public List<ExerciseType> findByBodypart(Bodypart bodypart) {
