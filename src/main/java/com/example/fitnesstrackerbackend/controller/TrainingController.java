@@ -57,12 +57,12 @@ public class TrainingController {
   }
 
 
-  @GetMapping("/{trainingId}/exercises")
+  @GetMapping("/{trainingId}/exerciseEvents")
   public List<ExerciseEvent> getExercisesForTraining(@PathVariable Long trainingId) throws NotFoundException {
     return trainingsService.getExercisesForTraining(trainingId);
   }
 
-  @PostMapping("/{trainingId}/exercises")
+  @PostMapping("/{trainingId}/exerciseEvents")
   public ExerciseEvent addExerciseEventToTraining(
           @PathVariable Long trainingId, @RequestBody ExerciseEvent exerciseEvent) throws NotFoundException, ConflictException, ValidationException {
     return trainingsService.addExerciseEventToTraining(trainingId,  exerciseEvent);
