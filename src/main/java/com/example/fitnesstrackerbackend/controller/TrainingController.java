@@ -23,7 +23,7 @@ public class TrainingController {
   private final TrainingsService trainingsService;
 
   @GetMapping("/all-trainings")
-  public List<TrainingDto> getAllTrainingsForCurrentUser() {
+  public List<Training> getAllTrainingsForCurrentUser() {
     User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     return trainingsService.getAllTrainingsForUser(user);

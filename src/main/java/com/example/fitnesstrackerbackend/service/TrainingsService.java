@@ -35,8 +35,8 @@ public class TrainingsService {
    * @param user the user
    * @return A list of all trainings for the user.
    */
-  public List<TrainingDto> getAllTrainingsForUser(User user) {
-    return trainingsRepository.findTrainingsByUser(user).stream().map(this::convertToDto).toList();
+  public List<Training> getAllTrainingsForUser(User user) {
+    return trainingsRepository.findTrainingsByUser(user);
   }
 
   /**
