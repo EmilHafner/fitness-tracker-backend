@@ -2,7 +2,9 @@ package com.example.fitnesstrackerbackend.models;
 
 import com.example.fitnesstrackerbackend.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -30,10 +32,12 @@ public class Training {
   @GeneratedValue
   private Long id;
   @ManyToOne
-  @JoinColumn(nullable = false)
+  @JoinColumn(nullable = false, name = "user_id", foreignKey = @ForeignKey(name = "fk_trainings_users"))
   @JsonIgnore
   private User user;
+  @Column(nullable = false, name = "start_date_time")
   private Date startDateTime;
+  @Column(nullable = true, name = "end_date_time")
   private Date endDateTime;
 
   @OneToMany(mappedBy = "training")
