@@ -6,8 +6,6 @@ import com.example.fitnesstrackerbackend.controller.dto.ValidationExceptionDto;
 import com.example.fitnesstrackerbackend.exception.ConflictException;
 import com.example.fitnesstrackerbackend.exception.NotFoundException;
 import com.example.fitnesstrackerbackend.exception.ValidationException;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.NotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.lang.annotation.Repeatable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
