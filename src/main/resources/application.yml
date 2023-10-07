@@ -1,7 +1,7 @@
 spring:
   datasource:
     # This is a free database hosted on neon.tech
-    url: jdbc:postgresql://ep-wispy-recipe-541979.eu-central-1.aws.neon.tech/neondb?user=EmilHafner&password=e7vMlHApfVQ6
+    url: jdbc:postgresql://ep-wispy-recipe-541979.eu-central-1.aws.neon.tech/neondb?user=EmilHafner&password=e7vMlHApfVQ6 # Not up to date #TODO: DB-Link in environment variable
 
     # This is a local database. If the above url is not working, use this one.
     # Just set up postgres in docker and run it on port 8099
