@@ -19,14 +19,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExerciseEventService {
 
-
   private final ExerciseEventRepository exerciseEventRepository;
   private final TrainingsSetRepository trainingsSetRepository;
   private final AccessValidator accessValidator;
   private final ExerciseTypeRepository exerciseTypeRepository;
 
   @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
-  @PostAuthorize("returnObject?.training.user.id == authentication.principal.id")
+  @PostAuthorize("returnObject != null and returnObject.training.user.id == authentication.principal.id")
   public ExerciseEvent getExerciseEventById(Long id) {
     return exerciseEventRepository.findById(id).orElse(null);
   }
