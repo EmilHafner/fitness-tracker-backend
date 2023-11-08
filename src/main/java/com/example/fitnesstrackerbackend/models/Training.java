@@ -37,7 +37,7 @@ public class Training {
   private User user;
   @Column(nullable = false, name = "start_date_time")
   private Date startDateTime;
-  @Column(nullable = true, name = "end_date_time")
+  @Column(name = "end_date_time")
   private Date endDateTime;
 
   @OneToMany(mappedBy = "training")
