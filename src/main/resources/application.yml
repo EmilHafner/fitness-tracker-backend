@@ -1,13 +1,9 @@
 spring:
   datasource:
-    # This is a free database hosted on neon.tech
-    url: jdbc:postgresql://ep-wispy-recipe-541979.eu-central-1.aws.neon.tech/neondb?user=EmilHafner&password=e7vMlHApfVQ6 # Not up to date #TODO: DB-Link in environment variable
+    url: jdbc:postgresql://localhost:${dbPort:8099}/postgres
+    username: ${dbUser:postgres}
+    password: ${dbPassword:postgres}
 
-    # This is a local database. If the above url is not working, use this one.
-    # Just set up postgres in docker and run it on port 8099
-    #url: jdbc:postgresql://localhost:8099/postgres
-    #username: postgres
-    #password: postgres
     driver-class-name: org.postgresql.Driver
   jpa:
     generate-ddl: true
@@ -25,6 +21,7 @@ spring:
       password: admin
 
 server:
+  port: ${port:8080}
   error:
     include-message: always
     include-binding-errors: always
